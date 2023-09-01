@@ -23,7 +23,6 @@ open class TestCopyTask : DefaultTask() {
     @OptIn(ExperimentalPathApi::class)
     @TaskAction
     fun doWork() {
-        dependsOn("processResources")
         val outputDir = outputDirectory.get().asFile.toPath()
         outputDir.deleteRecursively()
         outputDir.createDirectories()
@@ -33,7 +32,11 @@ open class TestCopyTask : DefaultTask() {
 }
 
 class TestCopy : Plugin<Project> {
-    override fun apply(target: Project) {}
+    override fun apply(target: Project) {
+        target.tasks.withType(TestCopyTask::class.java) {
+            dependsOn("processResources")
+        }
+    }
 }
 
 
